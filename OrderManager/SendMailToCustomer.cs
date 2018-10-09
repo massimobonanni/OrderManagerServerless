@@ -1,0 +1,50 @@
+using System.IO;
+using System.Threading.Tasks;
+using Microsoft.Azure.WebJobs;
+using Microsoft.Azure.WebJobs.Host;
+using Microsoft.Extensions.Logging;
+using SendGrid.Helpers.Mail;
+
+namespace OrderManager
+{
+    public static class SendMailToCustomer
+    {
+        [FunctionName("SendMailToCustomer")]
+        [StorageAccount("StorageAccount")]
+        public static void Run([BlobTrigger("invoices/{filename}")] Stream myBlob,
+            string filename,
+            [Table("ordersTable", "Order", "{filename}", Filter = null, Take = 50)] OrderRow orderRow,
+            ILogger log,
+            [SendGrid(ApiKey = "SendGridApiKey")] out SendGridMessage message)
+        {
+            log.LogInformation($"File Processed : {filename}");
+            log.LogInformation($"Order: {orderRow}");
+            log.LogInformation($"Customer mail: {orderRow.custEmail}");
+
+            message = new SendGridMessage()
+            {
+                Subject = "Azure Functions Invoice",
+                From = new EmailAddress("azureinvoice@invoiceplatform.com")
+            };
+            message.AddTo(new EmailAddress(orderRow.custEmail));
+
+            var buffer = ReadBufferFromStream(myBlob);
+
+            var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(buffer);
+            var text= System.Convert.ToBase64String(plainTextBytes);
+
+            message.AddContent("text/plain", System.Text.Encoding.UTF8.GetString(plainTextBytes));
+            message.AddAttachment("invoice.txt", text, "text/plain", "attachment", "Invoice File");
+        }
+
+        public static char[] ReadBufferFromStream(Stream input)
+        {
+            char[] buffer = new char[input.Length];
+            using (StreamReader reader = new StreamReader(input))
+            {
+                reader.Read(buffer, 0, (int)input.Length);
+            }
+            return buffer;
+        }
+    }
+}
