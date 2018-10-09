@@ -21,7 +21,12 @@ namespace OrderManager
             log.LogInformation($"Order: {orderRow}");
             log.LogInformation($"Customer mail: {orderRow.custEmail}");
 
-            message = new SendGridMessage()
+            message =CreateMailMessage(orderRow,myBlob);
+        }
+
+        private static SendGridMessage CreateMailMessage(OrderRow orderRow,Stream myBlob)
+        {
+            var message = new SendGridMessage()
             {
                 Subject = "Azure Functions Invoice",
                 From = new EmailAddress("azureinvoice@invoiceplatform.com")
@@ -31,13 +36,15 @@ namespace OrderManager
             var buffer = ReadBufferFromStream(myBlob);
 
             var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(buffer);
-            var text= System.Convert.ToBase64String(plainTextBytes);
+            var text = System.Convert.ToBase64String(plainTextBytes);
 
             message.AddContent("text/plain", System.Text.Encoding.UTF8.GetString(plainTextBytes));
             message.AddAttachment("invoice.txt", text, "text/plain", "attachment", "Invoice File");
+
+            return message;
         }
 
-        public static char[] ReadBufferFromStream(Stream input)
+        private static char[] ReadBufferFromStream(Stream input)
         {
             char[] buffer = new char[input.Length];
             using (StreamReader reader = new StreamReader(input))

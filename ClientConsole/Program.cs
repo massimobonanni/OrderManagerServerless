@@ -13,7 +13,7 @@ namespace ClientConsole
 
         static void Main(string[] args)
         {
-            ExecuteAsync(1).GetAwaiter().GetResult();
+            ExecuteAsync(5).GetAwaiter().GetResult();
 
             Console.ReadLine();
         }
