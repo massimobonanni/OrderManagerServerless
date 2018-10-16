@@ -12,10 +12,15 @@ variables:
 steps:
 - script: dotnet build --configuration $(buildConfiguration)
   displayName: 'dotnet build $(buildConfiguration)'
+- task: CopyFiles@2
+  inputs:
+    sourceFolder: '$(Build.SourcesDirectory)' 
+    contents: '**\OrderManager\bin\$(buildConfiguration)\netstandard2.0\bin\**' 
+    targetFolder: '$(Build.ArtifactStagingDirectory)'
 - task: ArchiveFiles@2
   inputs:
-    rootFolderOrFile: '$(Build.BinariesDirectory)' 
+    rootFolderOrFile: '$(Build.ArtifactStagingDirectory)' 
     archiveType: 'zip'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip' 
+    archiveFile: '$(Build.ArtifactStagingDirectory)/OrderManager-$(Build.Version).zip' 
     replaceExistingArchive: true 
   displayName: 'creating zip package $(Build.BuildId).zip'
