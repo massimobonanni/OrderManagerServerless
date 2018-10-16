@@ -1,2 +1,2 @@
 # OrderManagerServerless
-A simple sample for a order manager solution relized using Azure Functions
+A simple sample for a order manager solution realized using Azure Functions
