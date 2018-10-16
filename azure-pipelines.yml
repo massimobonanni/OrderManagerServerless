@@ -16,15 +16,13 @@ steps:
 - script: echo Build.StagingDirectory = '$(Build.StagingDirectory)'
 - script: dotnet build --configuration $(buildConfiguration)
   displayName: 'dotnet build $(buildConfiguration)'
-- task: CopyFiles@2
-  inputs:
-    sourceFolder: '$(Build.SourcesDirectory)' 
-    contents: '**\OrderManager\bin\$(buildConfiguration)\netstandard2.0\bin\**' 
-    targetFolder: '$(Build.ArtifactStagingDirectory)/bin'
 - task: ArchiveFiles@2
-  inputs:
-    rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/bin' 
-    archiveType: 'zip'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/OrderManager-$(Build.BuildNumber).zip' 
-    replaceExistingArchive: true 
-  displayName: 'creating zip package $(Build.BuildNumber).zip'
+    displayName: "Archive files"
+    inputs:
+      rootFolderOrFile: "$(System.DefaultWorkingDirectory)"
+      includeRootFolder: false
+      archiveFile: "$(System.DefaultWorkingDirectory)/$(Build.BuildId).zip"
+ - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: '$(System.DefaultWorkingDirectory)'
+      name: 'drop'
