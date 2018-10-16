@@ -14,13 +14,13 @@ steps:
   displayName: 'dotnet build $(buildConfiguration)'
 - task: CopyFiles@2
   inputs:
-    sourceFolder: '$(Build.SourcesDirectory)' 
-    contents: 'OrderManager\bin\$(buildConfiguration)\netstandard2.0\bin\**' 
+    sourceFolder: '$(Agent.BuildDirectory)' 
+    contents: '**\OrderManager\bin\$(buildConfiguration)\netstandard2.0\bin\**' 
     targetFolder: '$(Build.ArtifactStagingDirectory)'
 - task: ArchiveFiles@2
   inputs:
     rootFolderOrFile: '$(Build.ArtifactStagingDirectory)' 
     archiveType: 'zip'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/OrderManager-$(Build.BuildVersion).zip' 
+    archiveFile: '$(Build.ArtifactStagingDirectory)/OrderManager-$(Build.BuildNumber).zip' 
     replaceExistingArchive: true 
-  displayName: 'creating zip package $(Build.BuildVersion).zip'
+  displayName: 'creating zip package $(Build.BuildNumber).zip'
