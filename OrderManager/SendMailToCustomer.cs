@@ -21,10 +21,10 @@ namespace OrderManager
             log.LogInformation($"Order: {orderRow}");
             log.LogInformation($"Customer mail: {orderRow.custEmail}");
 
-            message =CreateMailMessage(orderRow,myBlob);
+            message = CreateMailMessage(orderRow, myBlob);
         }
 
-        private static SendGridMessage CreateMailMessage(OrderRow orderRow,Stream myBlob)
+        private static SendGridMessage CreateMailMessage(OrderRow orderRow, Stream myBlob)
         {
             var message = new SendGridMessage()
             {
