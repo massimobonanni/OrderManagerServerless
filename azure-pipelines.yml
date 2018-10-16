@@ -21,7 +21,7 @@ steps:
       rootFolderOrFile: "$(System.DefaultWorkingDirectory)"
       includeRootFolder: false
       archiveFile: "$(System.DefaultWorkingDirectory)/$(Build.BuildId).zip"
- - task: PublishBuildArtifacts@1
-   inputs:
+- task: PublishBuildArtifacts@1
+  inputs:
       PathtoPublish: '$(System.DefaultWorkingDirectory)'
       name: 'drop'
