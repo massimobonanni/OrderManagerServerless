@@ -17,11 +17,11 @@ steps:
 - script: dotnet build --configuration $(buildConfiguration)
   displayName: 'dotnet build $(buildConfiguration)'
 - task: ArchiveFiles@2
-    inputs:
+  inputs:
       rootFolderOrFile: "$(System.DefaultWorkingDirectory)"
       includeRootFolder: false
       archiveFile: "$(System.DefaultWorkingDirectory)/$(Build.BuildId).zip"
  - task: PublishBuildArtifacts@1
-    inputs:
+   inputs:
       PathtoPublish: '$(System.DefaultWorkingDirectory)'
       name: 'drop'
