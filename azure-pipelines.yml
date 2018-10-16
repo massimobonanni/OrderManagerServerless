@@ -10,5 +10,18 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
+- script: echo Agent.BuildDirectory = '$(Agent.BuildDirectory)'
+- script: echo Build.ArtifactStagingDirectory = '$(Build.ArtifactStagingDirectory)'
+- script: echo Build.SourcesDirectory = '$(Build.SourcesDirectory)'
+- script: echo Build.StagingDirectory = '$(Build.StagingDirectory)'
 - script: dotnet build --configuration $(buildConfiguration)
   displayName: 'dotnet build $(buildConfiguration)'
+- task: ArchiveFiles@2
+  inputs:
+      rootFolderOrFile: "$(System.DefaultWorkingDirectory)"
+      includeRootFolder: false
+      archiveFile: "$(System.DefaultWorkingDirectory)/Package/$(Build.BuildNumber).zip"
+- task: PublishBuildArtifacts@1
+  inputs:
+      PathtoPublish: '$(System.DefaultWorkingDirectory)'
+      name: 'drop'
