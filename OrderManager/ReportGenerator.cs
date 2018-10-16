@@ -14,7 +14,7 @@ namespace OrderManager
     {
         [FunctionName("ReportGenerator")]
         [StorageAccount("StorageAccount")]
-        public static async Task Run([TimerTrigger("0 */2 * * * *")] TimerInfo myTimer,
+        public static async Task Run([TimerTrigger("%RepoterScheduleTriggerTime%")] TimerInfo myTimer,
             [Table("ordersTable", "Order")] CloudTable table,
             IBinder reportBinder,
             ILogger log)
