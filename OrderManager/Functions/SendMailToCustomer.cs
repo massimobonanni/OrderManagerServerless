@@ -1,11 +1,9 @@
 using System.IO;
-using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Extensions.Logging;
 using SendGrid.Helpers.Mail;
 
-namespace OrderManager
+namespace OrderManager.Functions
 {
     public static class SendMailToCustomer
     {

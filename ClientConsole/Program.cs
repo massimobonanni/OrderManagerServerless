@@ -3,6 +3,7 @@ using OrderManager;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using OrderManager.Functions;
 
 namespace ClientConsole
 {
@@ -18,7 +19,7 @@ namespace ClientConsole
             Console.ReadLine();
         }
 
-        private async static Task ExecuteAsync(int numberOfOrders)
+        private static async Task ExecuteAsync(int numberOfOrders)
         {
             for (int i = 0; i < numberOfOrders; i++)
             {

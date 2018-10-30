@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace OrderManager
+namespace OrderManager.DurableFunctions
 {
     public class OrderRow
     {

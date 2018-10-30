@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace OrderManager
+namespace OrderManager.DurableFunctions
 {
     public class Order
     {
@@ -16,5 +16,7 @@ namespace OrderManager
         {
             return $"orderId={orderId}, custName={custName}, custAddress={custAddress}, custEmail={custEmail}, cartId={cartId}, date={date}, price={price}";
         }
+
+        public string fileName { get; set; }
     }
 }

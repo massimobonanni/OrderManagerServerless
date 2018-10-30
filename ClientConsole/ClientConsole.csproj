@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\OrderManager\Order.cs" Link="Order.cs" />
+    <Compile Include="..\OrderManager\Functions\Order.cs" Link="Order.cs" />
   </ItemGroup>
 
   <ItemGroup>

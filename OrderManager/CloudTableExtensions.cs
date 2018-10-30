@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static OrderManager.ReportGenerator;
+using static OrderManager.Functions.ReportGenerator;
 
 namespace Microsoft.WindowsAzure.Storage.Table
 {
