@@ -20,7 +20,7 @@ namespace OrderManager.DurableFunctions
                 [OrchestrationClient]DurableOrchestrationClient starter,
                 ILogger log)
         {
-            log.LogInformation($"Order Durable received!");
+            log.LogInformation($"[START ORCHESTRATOR CLIENT] --> Order Durable received!");
 
             string jsonContent = await req.Content.ReadAsStringAsync();
             string instanceId = null;
@@ -41,8 +41,10 @@ namespace OrderManager.DurableFunctions
 
 
         [FunctionName("OrderManagerDurable")]
-        public static async Task OrderManager([OrchestrationTrigger] DurableOrchestrationContext context)
+        public static async Task OrderManager([OrchestrationTrigger] DurableOrchestrationContext context,
+            ILogger log)
         {
+            log.LogInformation($"[START ORCHESTRATOR] --> OrderManagerDurable!");
             var order = context.GetInput<Order>();
 
             bool result = await context.CallActivityWithRetryAsync<bool>("OrderStoreDurable",
@@ -64,7 +66,7 @@ namespace OrderManager.DurableFunctions
             [Table("ordersTableDurable", Connection = "StorageAccount")] IAsyncCollector<OrderRow> outputTable,
             ILogger log)
         {
-            log.LogInformation($"OrderStoreDurable");
+            log.LogInformation($"[START ACTIVITY] --> OrderStoreDurable for orderId={order.orderId}");
             try
             {
                 OrderRow orderRow = new OrderRow(order);
@@ -85,7 +87,7 @@ namespace OrderManager.DurableFunctions
             IBinder outputBinder,
             ILogger log)
         {
-            log.LogInformation($"Generate invoice durable for order: {order.orderId}");
+            log.LogInformation($"[START ACTIVITY] --> GenerateInvoiceDurable for order: {order.orderId}");
             var fileName = $"invoicesdurable/{order.orderId}";
             using (var outputBlob = outputBinder.Bind<TextWriter>(new BlobAttribute(fileName)))
             {
@@ -108,6 +110,7 @@ namespace OrderManager.DurableFunctions
              IBinder invoiceBinder,
              ILogger log)
         {
+            log.LogInformation($"[START ACTIVITY] --> SendMailToCustomerDurable for order: {order.orderId}");
             log.LogInformation($"File Processed : {order.fileName}");
             log.LogInformation($"Order: {order}");
             log.LogInformation($"Customer mail: {order.custEmail}");
