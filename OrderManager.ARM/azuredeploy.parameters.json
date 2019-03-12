@@ -1,0 +1,33 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "serverfarms_WestEuropePlan_name": {
+      "value": null
+    },
+    "sites_OrderManagerServerless_name": {
+      "value": null
+    },
+    "components_OrderManagerServerless_name": {
+      "value": null
+    },
+    "config_web_name": {
+      "value": null
+    },
+    "storageAccounts_ordermanagercodestore_name": {
+      "value": null
+    },
+    "storageAccounts_ordermanagerdatastore_name": {
+      "value": null
+    },
+    "alertrules_Failure_Anomalies___OrderManagerServerless_name": {
+      "value": null
+    },
+    "deployments_de3ca2d91e59486387c8fb38a810014f_name": {
+      "value": null
+    },
+    "hostNameBindings_ordermanagerserverless.azurewebsites.net_name": {
+      "value": null
+    }
+  }
+}

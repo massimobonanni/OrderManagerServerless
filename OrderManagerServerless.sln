@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrderManager", "OrderManage
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientConsole", "ClientConsole\ClientConsole.csproj", "{A1C7AB87-6985-45EE-BB24-1EFE5D6986E7}"
 EndProject
+Project("{151D2E53-A2C4-4D7D-83FE-D05416EBD58E}") = "OrderManager.ARM", "OrderManager.ARM\OrderManager.ARM.deployproj", "{83F6276D-F70B-4EB3-B272-AB3DF2C6D8CF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{A1C7AB87-6985-45EE-BB24-1EFE5D6986E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A1C7AB87-6985-45EE-BB24-1EFE5D6986E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A1C7AB87-6985-45EE-BB24-1EFE5D6986E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83F6276D-F70B-4EB3-B272-AB3DF2C6D8CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83F6276D-F70B-4EB3-B272-AB3DF2C6D8CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83F6276D-F70B-4EB3-B272-AB3DF2C6D8CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83F6276D-F70B-4EB3-B272-AB3DF2C6D8CF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

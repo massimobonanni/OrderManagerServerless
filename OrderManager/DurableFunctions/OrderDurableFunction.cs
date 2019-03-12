@@ -14,7 +14,7 @@ namespace OrderManager.DurableFunctions
 {
     public static class OrderDurableFunction
     {
-        [FunctionName("OrderReceiverDurable")]
+        [FunctionName(FunctionNames.OrderReceiverDurable)]
         public static async Task<HttpResponseMessage> HttpStart(
                 [HttpTrigger(AuthorizationLevel.Function, "post")]HttpRequestMessage req,
                 [OrchestrationClient]DurableOrchestrationClient starter,
@@ -28,7 +28,7 @@ namespace OrderManager.DurableFunctions
             try
             {
                 order = JsonConvert.DeserializeObject<Order>(jsonContent);
-                instanceId = await starter.StartNewAsync("OrderManagerDurable", order);
+                instanceId = await starter.StartNewAsync(FunctionNames.OrderManagerDurable, order);
                 log.LogInformation($"Order received - started orchestration with ID = '{instanceId}'.");
             }
             catch (Exception ex)
@@ -40,33 +40,33 @@ namespace OrderManager.DurableFunctions
         }
 
 
-        [FunctionName("OrderManagerDurable")]
+        [FunctionName(FunctionNames.OrderManagerDurable)]
         public static async Task OrderManager([OrchestrationTrigger] DurableOrchestrationContext context,
             ILogger log)
         {
-            log.LogInformation($"[START ORCHESTRATOR] --> OrderManagerDurable!");
+            log.LogInformation($"[START ORCHESTRATOR] --> {FunctionNames.OrderManagerDurable}!");
             var order = context.GetInput<Order>();
 
-            bool result = await context.CallActivityWithRetryAsync<bool>("OrderStoreDurable",
+            bool result = await context.CallActivityWithRetryAsync<bool>(FunctionNames.OrderStoreDurable,
                 new RetryOptions(TimeSpan.FromSeconds(1), 10), order);
 
             if (!result)
                 return;
 
-            var fileName = await context.CallActivityAsync<string>("GenerateInvoiceDurable", order);
+            var fileName = await context.CallActivityAsync<string>(FunctionNames.GenerateInvoiceDurable, order);
 
             order.fileName = fileName;
 
-            await context.CallActivityAsync<string>("SendMailToCustomerDurable", order);
+            await context.CallActivityAsync<string>(FunctionNames.SendMailToCustomerDurable, order);
 
         }
 
-        [FunctionName("OrderStoreDurable")]
+        [FunctionName(FunctionNames.OrderStoreDurable)]
         public static async Task<bool> OrderStore([ActivityTrigger] Order order,
             [Table("ordersTableDurable", Connection = "StorageAccount")] IAsyncCollector<OrderRow> outputTable,
             ILogger log)
         {
-            log.LogInformation($"[START ACTIVITY] --> OrderStoreDurable for orderId={order.orderId}");
+            log.LogInformation($"[START ACTIVITY] --> {FunctionNames.OrderStoreDurable} for orderId={order.orderId}");
             try
             {
                 OrderRow orderRow = new OrderRow(order);
@@ -81,13 +81,13 @@ namespace OrderManager.DurableFunctions
             return true;
         }
 
-        [FunctionName("GenerateInvoiceDurable")]
+        [FunctionName(FunctionNames.GenerateInvoiceDurable)]
         [StorageAccount("StorageAccount")]
         public static Task<string> GenerateInvoice([ActivityTrigger] Order order,
             IBinder outputBinder,
             ILogger log)
         {
-            log.LogInformation($"[START ACTIVITY] --> GenerateInvoiceDurable for order: {order.orderId}");
+            log.LogInformation($"[START ACTIVITY] --> {FunctionNames.GenerateInvoiceDurable} for order: {order.orderId}");
             var fileName = $"invoicesdurable/{order.orderId}";
             using (var outputBlob = outputBinder.Bind<TextWriter>(new BlobAttribute(fileName)))
             {
@@ -103,14 +103,14 @@ namespace OrderManager.DurableFunctions
             return Task.FromResult(fileName);
         }
 
-        [FunctionName("SendMailToCustomerDurable")]
+        [FunctionName(FunctionNames.SendMailToCustomerDurable)]
         [StorageAccount("StorageAccount")]
         public static bool SendMailToCustomer([ActivityTrigger] Order order,
              [SendGrid(ApiKey = "SendGridApiKey")] out SendGridMessage message,
              IBinder invoiceBinder,
              ILogger log)
         {
-            log.LogInformation($"[START ACTIVITY] --> SendMailToCustomerDurable for order: {order.orderId}");
+            log.LogInformation($"[START ACTIVITY] --> {FunctionNames.SendMailToCustomerDurable} for order: {order.orderId}");
             log.LogInformation($"File Processed : {order.fileName}");
             log.LogInformation($"Order: {order}");
             log.LogInformation($"Customer mail: {order.custEmail}");
