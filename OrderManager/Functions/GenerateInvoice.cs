@@ -9,7 +9,8 @@ namespace OrderManager.Functions
     {
         [FunctionName("GenerateInvoice")]
         [StorageAccount("StorageAccount")]
-        public static void Run([QueueTrigger("orderreceivedqueue")]Order myQueueItem,
+        public static void Run(
+            [QueueTrigger("orderreceivedqueue")]Order myQueueItem,
             IBinder outputBinder,
             ILogger log)
         {

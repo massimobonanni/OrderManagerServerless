@@ -13,8 +13,9 @@ namespace OrderManager.Functions
     public static class OrderReceiver
     {
         [FunctionName("OrderReceiver")]
-        public static async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "post", Route = "ReceiveOrder")]HttpRequest req,
-            [Queue("orderreceivedqueue", Connection = "StorageAccount")]IAsyncCollector<Order> outputQueueItem,
+        public static async Task<IActionResult> Run(
+            [HttpTrigger(AuthorizationLevel.Function, "post", Route = "ReceiveOrder")] HttpRequest req,
+            [Queue("orderreceivedqueue", Connection = "StorageAccount")] IAsyncCollector<Order> outputQueueItem,
             [Table("ordersTable", Connection = "StorageAccount")] IAsyncCollector<OrderRow> outputTable,
             ILogger log)
         {
