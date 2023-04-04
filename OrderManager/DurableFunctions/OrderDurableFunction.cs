@@ -46,6 +46,7 @@ namespace OrderManager.DurableFunctions
         {
             log.LogInformation($"[START ORCHESTRATOR] --> {FunctionNames.OrderManagerDurable}!");
             var order = context.GetInput<Order>();
+            order.orderId = context.InstanceId;
 
             bool result = await context.CallActivityWithRetryAsync<bool>(FunctionNames.OrderStoreDurable,
                 new RetryOptions(TimeSpan.FromSeconds(1), 10), order);
@@ -88,7 +89,7 @@ namespace OrderManager.DurableFunctions
             ILogger log)
         {
             log.LogInformation($"[START ACTIVITY] --> {FunctionNames.GenerateInvoiceDurable} for order: {order.orderId}");
-            var fileName = $"invoicesdurable/{order.orderId}";
+            var fileName = $"invoicesdurable/{order.orderId}.txt";
             using (var outputBlob = outputBinder.Bind<TextWriter>(new BlobAttribute(fileName)))
             {
                 outputBlob.WriteLine($"Fattura generata il {DateTime.Now} per l'ordine {order.orderId} del {order.date}");
@@ -136,7 +137,8 @@ namespace OrderManager.DurableFunctions
             var text = System.Convert.ToBase64String(plainTextBytes);
 
             message.AddContent("text/plain", System.Text.Encoding.UTF8.GetString(plainTextBytes));
-            message.AddAttachment(order.fileName, text, "text/plain", "attachment", "Invoice File");
+            var filename = order.fileName.Split('/').Last();
+            message.AddAttachment(filename, text, "text/plain", "attachment", "Invoice File");
 
             return message;
         }
