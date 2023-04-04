@@ -3,7 +3,17 @@
   "logging": {
     "fileLoggingMode": "always",
     "logLevel": {
-      "default": "Information"
+      "default": "Warning",
+      "Function.OrderReceiverDurable": "Information",
+      "Function.OrderManagerDurable": "Information",
+      "Function.OrderStoreDurable": "Information",
+      "Function.GenerateInvoiceDurable": "Information",
+      "Function.SendMailToCustomerDurable": "Information"
+    }
+  },
+  "extensions": {
+    "durableTask": {
+      "hubName": "OrderManagerHub"
     }
   }
 }
